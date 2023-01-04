@@ -31,7 +31,7 @@ namespace To_Do_List
         [Required]
         public string Email { get; set; }
 
-        public List<Compito> ListaCommissioni { get; set; }
+        public List<Compito>? ListaCommissioni { get; set; }
 
 
     }

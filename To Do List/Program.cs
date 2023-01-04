@@ -18,12 +18,18 @@ using To_Do_List;
 }*/
 
 bool access;
+string username;
+bool flag=true;
 do
 {
-    string username = RaccoltaInputStringa("username");
+    username = RaccoltaInputStringa("username");
     access = Login(username);
 }
 while (!access);
+
+
+while (flag)
+{
 
     Console.WriteLine(
         "- - - - - - - COMANDI - - - - - - -" +
@@ -32,63 +38,77 @@ while (!access);
         "\n3) Rimuovere un'attività" +
         "\n4) Modificare un'attività" +
         "\n5) Modificare lo stato di un'attività" +
-        "\n6) Modifica data attività" +
+        "\n6) Prendi in carico un'attività" +
         "\n7) Visualizza le attività da svolgere" +
         "\n8) Visualizza le attività in scadenza" +
         "\n9) Visualizza le attività completate" +
         "\n*) Esci\n\n");
 
-string input = Console.ReadLine();
+    string input = Console.ReadLine();
 
-switch (input)
-{
-    case "1":
-        ListaAttivita();
+    switch (input)
+    {
+        case "1":
+            ListaAttivita();
 
-        break;
-    case "2":
-        Console.WriteLine("Aggiungi una nuova attività: ");
-        AggiungiAttività();
-        break;
-    case "3":
-        ListaAttivita();
-        Console.WriteLine("Quale attività vuoi rimuovere?\nInserire il suo ID");
-        int idDaRimuovere = int.Parse(Console.ReadLine()); // eccezione/metodo per prendere solo interi
-        RimuoviAttivita(idDaRimuovere);
-        break;
-    case "4":
-        ListaAttivita();
-        Console.WriteLine("Inserisci l'ID dell'attività che vuoi modificare");
-        int IdAttivitaDaModificare = int.Parse(Console.ReadLine());
-        ModificaAttività(IdAttivitaDaModificare);
-        
-        break;
-    case "5":
+            break;
+        case "2":
+            Console.WriteLine("Aggiungi una nuova attività: ");
+            AggiungiAttività();
+            break;
 
-        break;
-    case "6":
+        case "3":
+            ListaAttivita();
+            Console.WriteLine("Quale attività vuoi rimuovere?\nInserire il suo ID");
+            int idDaRimuovere = int.Parse(Console.ReadLine()); // eccezione/metodo per prendere solo interi
+            RimuoviAttivita(idDaRimuovere);
+            break;
 
-        break;
-    case "7":
-        ListaAttivitaDaSvolgere();
+        case "4":
+            ListaAttivita();
+            Console.WriteLine("Inserisci l'ID dell'attività che vuoi modificare");
+            int IdAttivitaDaModificare = int.Parse(Console.ReadLine());
+            ModificaAttività(IdAttivitaDaModificare);
+            break;
 
-        break;
-    case "8":
-        ListaAttivitaInScadenza();
+        case "5":
+            ListaAttivita();
+            Console.WriteLine("Inserisci l'ID dell'attività di cuoi vuoi modificare lo stato");
+            int IdStatoDaModificare = int.Parse(Console.ReadLine());
+            Modificastato(IdStatoDaModificare);
+            break;
 
-        break;
-    case "9":
-        ListaAttivitaCompletate();
+        case "6":
+            ListaAttivitaDaSvolgere();
+            Console.WriteLine("Inserisci l'ID dell'attività che vuoi prendere in carico");
+            int IdAttivitaDaPrendereinCarico = int.Parse(Console.ReadLine());
+            PrendiInCaricaAttivita(IdAttivitaDaPrendereinCarico);
 
-        break;
-    default:
-        Console.WriteLine("Buona Giornata!");
+            break;
 
-        break;
+        case "7":
+            ListaAttivitaDaSvolgere();
+
+            break;
+
+        case "8":
+            ListaAttivitaInScadenza();
+
+            break;
+
+        case "9":
+            ListaAttivitaCompletate();
+
+            break;
+
+        default:
+            Console.WriteLine("Buona Giornata!");
+            flag = false;
+            break;
+    }
+
+
 }
-
-
-
 
 
 // FUNZIONI
@@ -156,8 +176,8 @@ void AggiungiAttività()
         Categoria = RaccoltaInputStringa("categoria"),
         Descrizione = RaccoltaInputStringa("descrizione"),
         Scadenza = DateTime.Parse(RaccoltaInputStringa("scadenza")),
-        Stato = false
-        // Aggiungere cliente
+        Stato = false,
+        Cliente = AggiungiClienteAAttività()
     };
     using (ToDoListContext db = new ToDoListContext())
     {
@@ -166,7 +186,7 @@ void AggiungiAttività()
     }
 }
 
-void ModificaAttività(int ID)
+ void ModificaAttività(int ID)
 {
     using (ToDoListContext db = new ToDoListContext())
     {
@@ -194,6 +214,7 @@ void ModificaAttività(int ID)
                         break;
 
                 }
+                Console.WriteLine(compito);
 
             }
         }
@@ -263,5 +284,89 @@ void RimuoviAttivita(int ID)
                 db.Remove(compito);
         }
         db.SaveChanges();
+    }
+}
+
+void PrendiInCaricaAttivita(int ID)
+{
+    using (ToDoListContext db = new ToDoListContext())
+    {
+        Dipendente dipendenteAttivo = null;
+        foreach(Dipendente dipendente in db.Dipendenti)
+        {
+            if (username == dipendente.Username)
+            {
+                dipendenteAttivo = dipendente;
+                break;
+            }
+        }
+
+        foreach(Compito compito in db.Compiti)
+        {
+            if(ID== compito.Compito_Id)
+            {
+                compito.ListaDipendenti.Add(dipendenteAttivo);
+                break;
+            }
+            Console.WriteLine(compito);
+        }
+        db.SaveChanges();
+
+    }
+}
+
+
+
+void Modificastato(int ID)
+{
+    using (ToDoListContext db = new ToDoListContext())
+    {
+        foreach (Compito compito in db.Compiti)
+            if(compito.Compito_Id == ID)
+            {
+                compito.Stato = !compito.Stato;
+                Console.WriteLine(compito);
+            }
+        db.SaveChanges();
+    }
+}
+
+Cliente AggiungiCliente()
+{
+        Cliente cliente = new Cliente()
+        {
+            Nome = RaccoltaInputStringa("Nome"),
+            Cognome = RaccoltaInputStringa("Cognome"),
+            Indirizzo = RaccoltaInputStringa("Indirizzo"),
+            NumeroTelefono = RaccoltaInputStringa("Numero di telefono"),
+            Email = RaccoltaInputStringa("Email")
+        };
+    return cliente;
+}
+
+Cliente AggiungiClienteAAttività()
+{
+    Console.WriteLine("Il cliente ha già commissionato qualcosa in passato? (s/n)");
+    string yesOrNot = Console.ReadLine();
+    if (yesOrNot.ToLower() == "s")
+    {
+        using(ToDoListContext db = new ToDoListContext())
+        {
+            Console.WriteLine("Inserisci la mail del cliente");
+            string emailDaControllare = Console.ReadLine();
+            foreach(Cliente cliente in db.Clienti)
+            {
+                if (emailDaControllare == cliente.Email)
+                {
+                    return cliente;
+                }
+            }
+            Console.WriteLine("Cliente non trovato, aggiungere nuovo cliente");
+            return AggiungiCliente();
+        }
+    }
+    else
+    {
+        return AggiungiCliente();
     }
 }

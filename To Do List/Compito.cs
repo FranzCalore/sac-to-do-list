@@ -63,9 +63,9 @@ namespace To_Do_List
             return "ID: " + Compito_Id 
                 + "\nCategoria: " + Categoria 
                 + "\nDescrizione: " + Descrizione 
-                + "\nScadenza: " + Scadenza 
+                + "\nScadenza: " + Scadenza.Date 
                 + "\nStato: " + StatoStringa() 
-                + "\nCliente: " + Cliente 
+                + "\nCliente: " + Cliente
                 + "\nDipendenti in carica: " + ListaDipendenti
                 + "\n";
         }
