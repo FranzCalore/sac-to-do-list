@@ -11,6 +11,7 @@ namespace To_Do_List
 {
     [Table("Compito")]
     [Index(nameof(Compito_Id), IsUnique = true)]
+
     public class Compito
     {
         [Key]
@@ -30,10 +31,44 @@ namespace To_Do_List
 
         public Cliente Cliente { get; set; }
 
-        public List<Dipendente> ListaDipendenti { get; set; }
+        public List<Dipendente>? ListaDipendenti { get; set; }
 
+        //METODO
 
+        private string StatoStringa()
+        {
+            if (Stato)
+            {
+                return "Completato";
+            }
+            else
+            {
+                if (DateTime.Today==Scadenza.Date)
+                {
+                    return "DA COMPLETARE, IN SCADENZA!";
+                }
+                else if (DateTime.Now > Scadenza)
+                {
+                    return "Scaduto";
+                }
+                else
+                {
+                    return "Da Completare";
+                }
+            }
+        }
 
+        public override string ToString()
+        {
+            return "ID: " + Compito_Id 
+                + "\nCategoria: " + Categoria 
+                + "\nDescrizione: " + Descrizione 
+                + "\nScadenza: " + Scadenza 
+                + "\nStato: " + StatoStringa() 
+                + "\nCliente: " + Cliente 
+                + "\nDipendenti in carica: " + ListaDipendenti
+                + "\n";
+        }
 
     }
 }

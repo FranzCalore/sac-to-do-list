@@ -28,7 +28,7 @@ namespace To_Do_List
         [Required]
         public string Email { get; set; }
 
-        public List<Compito> ListaCompitiAssegnati { get; set; }
+        public List<Compito>? ListaCompitiAssegnati { get; set; }
 
     }
 }
