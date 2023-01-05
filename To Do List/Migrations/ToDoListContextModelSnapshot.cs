@@ -24,13 +24,13 @@ namespace ToDoList.Migrations
 
             modelBuilder.Entity("CompitoDipendente", b =>
                 {
-                    b.Property<int>("ListaCompitiAssegnatiCompito_Id")
+                    b.Property<int>("ListaCompitiAssegnatiCompitoID")
                         .HasColumnType("int");
 
                     b.Property<string>("ListaDipendentiUsername")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ListaCompitiAssegnatiCompito_Id", "ListaDipendentiUsername");
+                    b.HasKey("ListaCompitiAssegnatiCompitoID", "ListaDipendentiUsername");
 
                     b.HasIndex("ListaDipendentiUsername");
 
@@ -39,11 +39,11 @@ namespace ToDoList.Migrations
 
             modelBuilder.Entity("To_Do_List.Cliente", b =>
                 {
-                    b.Property<int>("Cliente_ID")
+                    b.Property<int>("ClienteID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cliente_ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteID"));
 
                     b.Property<string>("Cognome")
                         .IsRequired()
@@ -65,9 +65,9 @@ namespace ToDoList.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Cliente_ID");
+                    b.HasKey("ClienteID");
 
-                    b.HasIndex("Cliente_ID")
+                    b.HasIndex("ClienteID")
                         .IsUnique();
 
                     b.ToTable("Cliente");
@@ -75,17 +75,17 @@ namespace ToDoList.Migrations
 
             modelBuilder.Entity("To_Do_List.Compito", b =>
                 {
-                    b.Property<int>("Compito_Id")
+                    b.Property<int>("CompitoID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Compito_Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompitoID"));
 
                     b.Property<string>("Categoria")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Cliente_ID")
+                    b.Property<int>("ClienteID")
                         .HasColumnType("int");
 
                     b.Property<string>("Descrizione")
@@ -98,11 +98,11 @@ namespace ToDoList.Migrations
                     b.Property<bool>("Stato")
                         .HasColumnType("bit");
 
-                    b.HasKey("Compito_Id");
+                    b.HasKey("CompitoID");
 
-                    b.HasIndex("Cliente_ID");
+                    b.HasIndex("ClienteID");
 
-                    b.HasIndex("Compito_Id")
+                    b.HasIndex("CompitoID")
                         .IsUnique();
 
                     b.ToTable("Compito");
@@ -141,7 +141,7 @@ namespace ToDoList.Migrations
                 {
                     b.HasOne("To_Do_List.Compito", null)
                         .WithMany()
-                        .HasForeignKey("ListaCompitiAssegnatiCompito_Id")
+                        .HasForeignKey("ListaCompitiAssegnatiCompitoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -156,7 +156,7 @@ namespace ToDoList.Migrations
                 {
                     b.HasOne("To_Do_List.Cliente", "Cliente")
                         .WithMany("ListaCommissioni")
-                        .HasForeignKey("Cliente_ID")
+                        .HasForeignKey("ClienteID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

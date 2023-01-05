@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace To_Do_List
 {
     [Table("Cliente")]
-    [Index(nameof(Cliente_ID), IsUnique = true)]
+    [Index(nameof(ClienteID), IsUnique = true)]
     public class Cliente
     {
         [Key]
-        public int Cliente_ID { get; set; }
+        public int ClienteID { get; set; }
 
         [Required]
         public string Nome { get; set; }

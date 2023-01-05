@@ -192,7 +192,7 @@ void AggiungiAttività()
     {
         foreach (Compito compito in db.Compiti)
         {
-            if (ID == compito.Compito_Id)
+            if (ID == compito.CompitoID)
             {
                 Console.WriteLine(compito);
                 Console.WriteLine("\n\nCosa vuoi modificare?");
@@ -279,7 +279,7 @@ void RimuoviAttivita(int ID)
     using (ToDoListContext db = new ToDoListContext())
     {
         foreach (Compito compito in db.Compiti)
-        if(compito.Compito_Id == ID)
+        if(compito.CompitoID == ID)
         {
                 db.Remove(compito);
         }
@@ -303,7 +303,7 @@ void PrendiInCaricaAttivita(int ID)
 
         foreach(Compito compito in db.Compiti)
         {
-            if(ID== compito.Compito_Id)
+            if(ID== compito.CompitoID)
             {
                 compito.ListaDipendenti.Add(dipendenteAttivo);
                 break;
@@ -322,7 +322,7 @@ void Modificastato(int ID)
     using (ToDoListContext db = new ToDoListContext())
     {
         foreach (Compito compito in db.Compiti)
-            if(compito.Compito_Id == ID)
+            if(compito.CompitoID == ID)
             {
                 compito.Stato = !compito.Stato;
                 Console.WriteLine(compito);

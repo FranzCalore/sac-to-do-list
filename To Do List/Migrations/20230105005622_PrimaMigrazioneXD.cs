@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ToDoList.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class PrimaMigrazioneXD : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace ToDoList.Migrations
                 name: "Cliente",
                 columns: table => new
                 {
-                    ClienteID = table.Column<int>(name: "Cliente_ID", type: "int", nullable: false)
+                    ClienteID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cognome = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -47,22 +47,22 @@ namespace ToDoList.Migrations
                 name: "Compito",
                 columns: table => new
                 {
-                    CompitoId = table.Column<int>(name: "Compito_Id", type: "int", nullable: false)
+                    CompitoID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Categoria = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descrizione = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Scadenza = table.Column<DateTime>(type: "Date", nullable: false),
                     Stato = table.Column<bool>(type: "bit", nullable: false),
-                    ClienteID = table.Column<int>(name: "Cliente_ID", type: "int", nullable: false)
+                    ClienteID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Compito", x => x.CompitoId);
+                    table.PrimaryKey("PK_Compito", x => x.CompitoID);
                     table.ForeignKey(
-                        name: "FK_Compito_Cliente_Cliente_ID",
+                        name: "FK_Compito_Cliente_ClienteID",
                         column: x => x.ClienteID,
                         principalTable: "Cliente",
-                        principalColumn: "Cliente_ID",
+                        principalColumn: "ClienteID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -70,17 +70,17 @@ namespace ToDoList.Migrations
                 name: "CompitoDipendente",
                 columns: table => new
                 {
-                    ListaCompitiAssegnatiCompitoId = table.Column<int>(name: "ListaCompitiAssegnatiCompito_Id", type: "int", nullable: false),
+                    ListaCompitiAssegnatiCompitoID = table.Column<int>(type: "int", nullable: false),
                     ListaDipendentiUsername = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CompitoDipendente", x => new { x.ListaCompitiAssegnatiCompitoId, x.ListaDipendentiUsername });
+                    table.PrimaryKey("PK_CompitoDipendente", x => new { x.ListaCompitiAssegnatiCompitoID, x.ListaDipendentiUsername });
                     table.ForeignKey(
-                        name: "FK_CompitoDipendente_Compito_ListaCompitiAssegnatiCompito_Id",
-                        column: x => x.ListaCompitiAssegnatiCompitoId,
+                        name: "FK_CompitoDipendente_Compito_ListaCompitiAssegnatiCompitoID",
+                        column: x => x.ListaCompitiAssegnatiCompitoID,
                         principalTable: "Compito",
-                        principalColumn: "Compito_Id",
+                        principalColumn: "CompitoID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CompitoDipendente_Dipendente_ListaDipendentiUsername",
@@ -91,20 +91,20 @@ namespace ToDoList.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_Cliente_ID",
+                name: "IX_Cliente_ClienteID",
                 table: "Cliente",
-                column: "Cliente_ID",
+                column: "ClienteID",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Compito_Cliente_ID",
+                name: "IX_Compito_ClienteID",
                 table: "Compito",
-                column: "Cliente_ID");
+                column: "ClienteID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Compito_Compito_Id",
+                name: "IX_Compito_CompitoID",
                 table: "Compito",
-                column: "Compito_Id",
+                column: "CompitoID",
                 unique: true);
 
             migrationBuilder.CreateIndex(

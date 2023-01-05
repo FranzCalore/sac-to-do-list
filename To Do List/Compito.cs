@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 namespace To_Do_List
 {
     [Table("Compito")]
-    [Index(nameof(Compito_Id), IsUnique = true)]
+    [Index(nameof(CompitoID), IsUnique = true)]
 
     public class Compito
     {
         [Key]
-        public int Compito_Id { get; set; }
+        public int CompitoID { get; set; }
 
         [Required]
         public string Categoria { get; set; }
@@ -28,6 +28,8 @@ namespace To_Do_List
 
         [Required]
         public bool Stato { get; set; }
+
+        public int ClienteID { get; set; }
 
         public Cliente Cliente { get; set; }
 
@@ -60,12 +62,23 @@ namespace To_Do_List
 
         public override string ToString()
         {
-            return "ID: " + Compito_Id 
+            Cliente ClienteAttivo = null;
+            using(ToDoListContext db = new ToDoListContext())
+            {
+                foreach(Cliente cliente in db.Clienti)
+                {
+                    if (cliente.ClienteID==this.ClienteID)
+                    {
+                        ClienteAttivo = cliente;
+                    }
+                }
+            }
+            return "ID: " + CompitoID 
                 + "\nCategoria: " + Categoria 
                 + "\nDescrizione: " + Descrizione 
                 + "\nScadenza: " + Scadenza.Date 
                 + "\nStato: " + StatoStringa() 
-                + "\nCliente: " + Cliente
+                + "\nCliente: " + ClienteAttivo.Nome + " " + ClienteAttivo.Cognome
                 + "\nDipendenti in carica: " + ListaDipendenti
                 + "\n";
         }
