@@ -30,5 +30,21 @@ namespace To_Do_List
 
         public List<Compito>? ListaCompitiAssegnati { get; set; }
 
+
+
+
+        public override string ToString()
+        {
+
+            return $"{Username} - {Nome} {Cognome}";
+        }
+
+        public static void StampaListaCompiti(List<Compito> listacompiti)
+        {
+            foreach(Compito compito in listacompiti)
+            {
+                Console.WriteLine(compito);
+            }
+        }
     }
 }

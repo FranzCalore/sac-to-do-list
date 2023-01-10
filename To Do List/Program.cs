@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Azure.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using To_Do_List;
 
 
@@ -19,7 +21,7 @@ using To_Do_List;
 
 bool access;
 string username;
-bool flag=true;
+bool flag = true;
 do
 {
     username = RaccoltaInputStringa("username");
@@ -50,6 +52,34 @@ while (flag)
     {
         case "1":
             ListaAttivita();
+            Console.WriteLine("Vuoi filtrare le attività secondo qualche parametro? (s/n)\n\n");
+            string siONo = Console.ReadLine();
+            if (siONo.ToLower() == "s")
+            {
+                Console.WriteLine("\n1)Filtra per dipendente" +
+                    "\n2)Filtra per categoria" +
+                    "\n3)Filtra per cliente" +
+                    "\n4)Filtra per data di scadenza" +
+                    "\n*)Torna al menu precedente\n\n");
+                string inputfiltro = Console.ReadLine();
+                switch (inputfiltro)
+                {
+                    case "1":
+                        Console.WriteLine("Inserisci l'username del dipedente per cui vuoi filtrare");
+                        string usernameDaCercare = Console.ReadLine();
+                        Dipendente.StampaListaCompiti(RicercaPerDipendente(usernameDaCercare));
+                        break;
+                    case "2":
+
+                        break;
+                    case "3":
+
+                        break;
+                    default:
+                        break;
+
+                }
+            }
 
             break;
         case "2":
@@ -133,14 +163,14 @@ bool Login(string username)
 
 string RaccoltaInputStringa(string nomeParametroDaRaccogliere)
 {
-    bool confirmFlag=false;
+    bool confirmFlag = false;
     string inputUtente = "";
     Console.WriteLine("Inserisci il tuo " + nomeParametroDaRaccogliere);
     do
     {
         inputUtente = Console.ReadLine();
         Console.WriteLine("Hai inserito " + inputUtente + " come " + nomeParametroDaRaccogliere + " è corretto? (s/n)");
-        string siONo=Console.ReadLine();
+        string siONo = Console.ReadLine();
         if (siONo.ToLower() == "s")
         {
             confirmFlag = true;
@@ -172,7 +202,8 @@ void AggiungiDipendente()
 }
 void AggiungiAttività()
 {
-    Compito attivita = new Compito() {
+    Compito attivita = new Compito()
+    {
         Categoria = RaccoltaInputStringa("categoria"),
         Descrizione = RaccoltaInputStringa("descrizione"),
         Scadenza = DateTime.Parse(RaccoltaInputStringa("scadenza")),
@@ -186,7 +217,7 @@ void AggiungiAttività()
     }
 }
 
- void ModificaAttività(int ID)
+void ModificaAttività(int ID)
 {
     using (ToDoListContext db = new ToDoListContext())
     {
@@ -222,21 +253,21 @@ void AggiungiAttività()
     }
 }
 void ListaAttivita()
+{
+    using (ToDoListContext db = new ToDoListContext())
     {
-        using (ToDoListContext db = new ToDoListContext())
+        foreach (Compito compito in db.Compiti)
         {
-            foreach(Compito compito in db.Compiti)
-            {
-                Console.WriteLine(compito);
-            }
+            Console.WriteLine(compito);
         }
     }
+}
 
 void ListaAttivitaDaSvolgere()
 {
     using (ToDoListContext db = new ToDoListContext())
     {
-        foreach(Compito compito in db.Compiti)
+        foreach (Compito compito in db.Compiti)
         {
             if (!compito.Stato)
             {
@@ -279,10 +310,10 @@ void RimuoviAttivita(int ID)
     using (ToDoListContext db = new ToDoListContext())
     {
         foreach (Compito compito in db.Compiti)
-        if(compito.CompitoID == ID)
-        {
+            if (compito.CompitoID == ID)
+            {
                 db.Remove(compito);
-        }
+            }
         db.SaveChanges();
     }
 }
@@ -292,7 +323,7 @@ void PrendiInCaricaAttivita(int ID)
     using (ToDoListContext db = new ToDoListContext())
     {
         Dipendente dipendenteAttivo = null;
-        foreach(Dipendente dipendente in db.Dipendenti)
+        foreach (Dipendente dipendente in db.Dipendenti)
         {
             if (username == dipendente.Username)
             {
@@ -301,9 +332,9 @@ void PrendiInCaricaAttivita(int ID)
             }
         }
 
-        foreach(Compito compito in db.Compiti)
+        foreach (Compito compito in db.Compiti)
         {
-            if(ID== compito.CompitoID)
+            if (ID == compito.CompitoID)
             {
                 compito.ListaDipendenti.Add(dipendenteAttivo);
                 break;
@@ -322,7 +353,7 @@ void Modificastato(int ID)
     using (ToDoListContext db = new ToDoListContext())
     {
         foreach (Compito compito in db.Compiti)
-            if(compito.CompitoID == ID)
+            if (compito.CompitoID == ID)
             {
                 compito.Stato = !compito.Stato;
                 Console.WriteLine(compito);
@@ -333,14 +364,14 @@ void Modificastato(int ID)
 
 Cliente AggiungiCliente()
 {
-        Cliente cliente = new Cliente()
-        {
-            Nome = RaccoltaInputStringa("Nome"),
-            Cognome = RaccoltaInputStringa("Cognome"),
-            Indirizzo = RaccoltaInputStringa("Indirizzo"),
-            NumeroTelefono = RaccoltaInputStringa("Numero di telefono"),
-            Email = RaccoltaInputStringa("Email")
-        };
+    Cliente cliente = new Cliente()
+    {
+        Nome = RaccoltaInputStringa("Nome"),
+        Cognome = RaccoltaInputStringa("Cognome"),
+        Indirizzo = RaccoltaInputStringa("Indirizzo"),
+        NumeroTelefono = RaccoltaInputStringa("Numero di telefono"),
+        Email = RaccoltaInputStringa("Email")
+    };
     return cliente;
 }
 
@@ -350,11 +381,11 @@ Cliente AggiungiClienteAAttività()
     string yesOrNot = Console.ReadLine();
     if (yesOrNot.ToLower() == "s")
     {
-        using(ToDoListContext db = new ToDoListContext())
+        using (ToDoListContext db = new ToDoListContext())
         {
             Console.WriteLine("Inserisci la mail del cliente");
             string emailDaControllare = Console.ReadLine();
-            foreach(Cliente cliente in db.Clienti)
+            foreach (Cliente cliente in db.Clienti)
             {
                 if (emailDaControllare == cliente.Email)
                 {
@@ -369,4 +400,16 @@ Cliente AggiungiClienteAAttività()
     {
         return AggiungiCliente();
     }
+}
+
+List<Compito> RicercaPerDipendente(string usernameUtente)
+{
+    using (ToDoListContext db = new ToDoListContext())
+    {
+        List<Compito> CompitixDipendente = (from d in db.Dipendenti
+                                            where d.Username == usernameUtente
+                                            select d.ListaCompitiAssegnati).FirstOrDefault();
+        return CompitixDipendente;
+    }
+
 }

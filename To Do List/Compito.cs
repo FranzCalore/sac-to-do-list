@@ -63,24 +63,41 @@ namespace To_Do_List
         public override string ToString()
         {
             Cliente ClienteAttivo = null;
-            using(ToDoListContext db = new ToDoListContext())
+            using (ToDoListContext db = new ToDoListContext())
             {
-                foreach(Cliente cliente in db.Clienti)
+                foreach (Cliente cliente in db.Clienti)
                 {
-                    if (cliente.ClienteID==this.ClienteID)
+                    if (cliente.ClienteID == this.ClienteID)
                     {
                         ClienteAttivo = cliente;
                     }
                 }
+
+                return "ID: " + CompitoID
+                    + "\nCategoria: " + Categoria
+                    + "\nDescrizione: " + Descrizione
+                    + "\nScadenza: " + Scadenza.ToString("dd/MM/yyyy")
+                    + "\nStato: " + StatoStringa()
+                    + "\nCliente: " + ClienteAttivo.Nome + " " + ClienteAttivo.Cognome
+                    + "\nDipendenti in carica: " + StampaListaDipendenti()
+                    + "\n";
             }
-            return "ID: " + CompitoID 
-                + "\nCategoria: " + Categoria 
-                + "\nDescrizione: " + Descrizione 
-                + "\nScadenza: " + Scadenza.Date 
-                + "\nStato: " + StatoStringa() 
-                + "\nCliente: " + ClienteAttivo.Nome + " " + ClienteAttivo.Cognome
-                + "\nDipendenti in carica: " + ListaDipendenti
-                + "\n";
+        }
+
+        private string StampaListaDipendenti()
+        {
+            using ToDoListContext db = new ToDoListContext();
+
+            List <Dipendente> Dipendenti= (from c in db.Compiti
+                                 where c.CompitoID == CompitoID
+                                 select c.ListaDipendenti).FirstOrDefault();
+            string stringadipendenti = "";
+            foreach (Dipendente dipendente in Dipendenti)
+            {
+                stringadipendenti+= dipendente.ToString();
+                stringadipendenti += "\n";
+            }
+            return stringadipendenti;
         }
 
     }
