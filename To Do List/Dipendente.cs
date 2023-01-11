@@ -28,6 +28,8 @@ namespace To_Do_List
         [Required]
         public string Email { get; set; }
 
+        public bool Admin { get; set; }
+
         public List<Compito>? ListaCompitiAssegnati { get; set; }
 
 
@@ -36,12 +38,12 @@ namespace To_Do_List
         public override string ToString()
         {
 
-            return $"{Username} - {Nome} {Cognome}";
+            return $"{Username} - {Nome} {Cognome} - {Email} - {NumeroTelefono} Admin: {Admin}";
         }
 
         public static void StampaListaCompiti(List<Compito> listacompiti)
         {
-            foreach(Compito compito in listacompiti)
+            foreach (Compito compito in listacompiti)
             {
                 Console.WriteLine(compito);
             }

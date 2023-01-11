@@ -45,7 +45,7 @@ namespace To_Do_List
             }
             else
             {
-                if (DateTime.Today==Scadenza.Date)
+                if (DateTime.Today == Scadenza.Date)
                 {
                     return "DA COMPLETARE, IN SCADENZA!";
                 }
@@ -73,7 +73,7 @@ namespace To_Do_List
                     }
                 }
 
-                return "ID: " + CompitoID
+                return "\n\nID: " + CompitoID
                     + "\nCategoria: " + Categoria
                     + "\nDescrizione: " + Descrizione
                     + "\nScadenza: " + Scadenza.ToString("dd/MM/yyyy")
@@ -88,13 +88,13 @@ namespace To_Do_List
         {
             using ToDoListContext db = new ToDoListContext();
 
-            List <Dipendente> Dipendenti= (from c in db.Compiti
-                                 where c.CompitoID == CompitoID
-                                 select c.ListaDipendenti).FirstOrDefault();
+            List<Dipendente> Dipendenti = (from c in db.Compiti
+                                           where c.CompitoID == CompitoID
+                                           select c.ListaDipendenti).FirstOrDefault();
             string stringadipendenti = "";
             foreach (Dipendente dipendente in Dipendenti)
             {
-                stringadipendenti+= dipendente.ToString();
+                stringadipendenti += dipendente.ToString();
                 stringadipendenti += "\n";
             }
             return stringadipendenti;
